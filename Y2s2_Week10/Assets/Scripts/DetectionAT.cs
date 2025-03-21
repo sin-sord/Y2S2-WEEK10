@@ -8,13 +8,9 @@ namespace NodeCanvas.Tasks.Actions
     public class DetectionAT : ActionTask
     {
 
-
-
-        float bestCriteriaValue;
-        float currentCriteriaValue;
-
         public float detectionRadius;
         public LayerMask thiefLayerMask;
+        public BBParameter<Transform> targetTransform;
 
         //Use for initialization. This is called only once in the lifetime of the task.
         //Return null if init was successfull. Return an error string otherwise
@@ -29,11 +25,6 @@ namespace NodeCanvas.Tasks.Actions
         protected override void OnExecute()
         {
 
-        }
-
-        //Called once per frame while the action is active.
-        protected override void OnUpdate()
-        {
             Transform bestTarget = null;
             float closestDistance = detectionRadius;
 
@@ -58,9 +49,20 @@ namespace NodeCanvas.Tasks.Actions
 
             if (bestTarget != null)
             {
-                Debug.DrawLine(agent.transform.position, bestTarget.transform.position, Color.red);
+                targetTransform.value = bestTarget;
+                EndAction(true);
+                //                Debug.DrawLine(agent.transform.position, bestTarget.transform.position, Color.red);
 
             }
+            else
+            {
+                EndAction(false);
+            }
+        }
+
+        //Called once per frame while the action is active.
+        protected override void OnUpdate()
+        {
 
         }
 
